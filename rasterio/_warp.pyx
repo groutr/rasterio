@@ -376,7 +376,7 @@ def _reproject(
             # ensure data converted to numpy array
             source = np.array(source, copy=False)
             # Convert 2D single-band arrays to 3D multi-band.
-            if len(source.shape) == 2:
+            if source.ndim == 2:
                 source = source.reshape(1, *source.shape)
             src_count = source.shape[0]
             src_bidx = range(1, src_count + 1)
@@ -416,7 +416,7 @@ def _reproject(
                 raise CRSError("Missing dst_crs.")
             # ensure data converted to numpy array
             destination = np.array(destination, copy=False)
-            if len(destination.shape) == 2:
+            if destination.ndim == 2:
                 destination = destination.reshape(1, *destination.shape)
 
             if destination.shape[0] == src_count:

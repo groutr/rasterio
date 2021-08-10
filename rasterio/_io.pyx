@@ -323,7 +323,7 @@ cdef int io_auto(data, GDALRasterBandH band, bint write, int resampling=0) excep
                   0 (False) uses read mode (reads band into data)
     :return: the return value from the data-type specific IO function
     """
-    cdef int ndims = len(data.shape)
+    cdef int ndims = data.ndim
     cdef float height = data.shape[-2]
     cdef float width = data.shape[-1]
 
@@ -1559,7 +1559,7 @@ cdef class DatasetWriterBase(DatasetReaderBase):
             indexes = [indexes]
             arr = np.stack((arr,))
 
-        if len(arr.shape) != 3 or arr.shape[0] != len(indexes):
+        if arr.ndim != 3 or arr.shape[0] != len(indexes):
             raise ValueError(
                 "Source shape {} is inconsistent with given indexes {}"
                 .format(arr.shape, len(indexes)))

@@ -81,7 +81,7 @@ def show(source, with_bounds=True, contour=False, contour_label_kws=None,
 
     if isinstance(source, tuple):
         arr = source[0].read(source[1])
-        if len(arr.shape) >= 3:
+        if arr.ndim >= 3:
             arr = reshape_as_image(arr)
         if with_bounds:
             kwargs['extent'] = plotting_extent(source[0])
@@ -114,7 +114,7 @@ def show(source, with_bounds=True, contour=False, contour_label_kws=None,
     else:
         # The source is a numpy array reshape it to image if it has 3+ bands
         source = np.ma.squeeze(source)
-        if len(source.shape) >= 3:
+        if source.ndim >= 3:
             arr = reshape_as_image(source)
         else:
             arr = source
@@ -260,7 +260,7 @@ def show_hist(source, bins=10, masked=True, title='Histogram', ax=None, label=No
     # so we need the overall min/max to constrain the plot
     rng = np.nanmin(arr), np.nanmax(arr)
 
-    if len(arr.shape) == 2:
+    if arr.ndim == 2:
         arr = np.expand_dims(arr.flatten(), 0).T
         colors = ['gold']
     else:

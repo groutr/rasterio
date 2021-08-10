@@ -189,9 +189,9 @@ def calc(ctx, command, files, output, driver, name, dtype, masked, overwrite, me
 
                 if isinstance(results, np.ma.core.MaskedArray):
                     results = results.filled(float(kwargs['nodata']))
-                    if len(results.shape) == 2:
+                    if results.ndim == 2:
                         results = np.ma.asanyarray([results])
-                elif len(results.shape) == 2:
+                elif results.ndim == 2:
                     results = np.asanyarray([results])
 
                 # The first iteration is only to get sample results and from them
