@@ -557,9 +557,8 @@ class Window:
     def __repr__(self):
         """Return a nicely formatted representation string"""
         return (
-            "Window(col_off={self.col_off}, row_off={self.row_off}, "
-            "width={self.width}, height={self.height})").format(
-                self=self)
+            f"Window(col_off={self.col_off}, row_off={self.row_off}, "
+            f"width={self.width}, height={self.height})")
 
     def flatten(self):
         """A flattened form of the window.
