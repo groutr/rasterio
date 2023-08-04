@@ -599,6 +599,11 @@ class Window:
         """
         (r0, r1), (c0, c1) = self.toranges()
 
+        r0 = math.floor(r0)
+        r1 = math.floor(r1)
+        c0 = math.floor(c0)
+        c1 = math.floor(c1)
+
         if r0 < 0:
             r0 = 0
         if r1 < 0:
@@ -608,10 +613,7 @@ class Window:
         if c1 < 0:
             c1 = 0
 
-        return (
-            slice(int(math.floor(r0)), int(math.ceil(r1))),
-            slice(int(math.floor(c0)), int(math.ceil(c1))),
-        )
+        return (slice(r0, r1), slice(c0, c1))
 
     @classmethod
     def from_slices(cls, rows, cols, height=-1, width=-1, boundless=False):
@@ -722,10 +724,9 @@ class Window:
         Window
 
         """
-        operator = lambda x: int(math.floor(x + 0.5))
-        width = operator(self.width)
-        height = operator(self.height)
-        return Window(self.col_off, self.row_off, width, height)
+        return Window(self.col_off, self.row_off,
+                      math.floor(self.width + 0.5),
+                      math.floor(self.height + 0.5))
 
     def round_shape(self, **kwds):
         warnings.warn(
@@ -750,10 +751,9 @@ class Window:
         Window
 
         """
-        operator = lambda x: int(math.floor(x + 0.001))
-        row_off = operator(self.row_off)
-        col_off = operator(self.col_off)
-        return Window(col_off, row_off, self.width, self.height)
+        return Window(math.floor(self.col_off + 0.001),
+                      math.floor(self.row_off + 0.001),
+                      self.width, self.height)
 
     def crop(self, height, width):
         """Return a copy cropped to height and width"""
