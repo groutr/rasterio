@@ -526,12 +526,7 @@ def round_window_to_full_blocks(window, block_shapes, height=0, width=0):
 def validate_length_value(instance, attribute, value):
     if value < 0:
         raise ValueError(f"{attribute.name} must be non-negative. Received {value}")
-    
 
-def validate_numeric(instance, attribute, value):
-    if not isinstance(value, (float, int)):
-        raise ValueError(f"{attribute.name} must be int or float. Received {value}")
-    
 
 @attr.s(slots=True,
         frozen=True)
@@ -554,10 +549,10 @@ class Window:
     this is a bit confusing in the new float precision world and the
     attributes have been changed. The originals are deprecated.
     """
-    col_off = attr.ib(validator=validate_numeric)
-    row_off = attr.ib(validator=validate_numeric)
-    width = attr.ib(validator=[validate_numeric, validate_length_value])
-    height = attr.ib(validator=[validate_numeric, validate_length_value])
+    col_off = attr.ib(converter=float)
+    row_off = attr.ib(converter=float)
+    width = attr.ib(converter=float, validator=validate_length_value)
+    height = attr.ib(converter=float, validator=validate_length_value)
 
     def __repr__(self):
         """Return a nicely formatted representation string"""
