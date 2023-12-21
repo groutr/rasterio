@@ -344,7 +344,7 @@ class TransformerBase:
     def __exit__(self, *args):
         pass
 
-    def rowcol(self, xs, ys, zs=None, op=math.floor, precision=None):
+    def rowcol(self, xs, ys, zs=None, op=np.floor, precision=None):
         """Get rows and cols coordinates given geographic coordinates.
 
         Parameters
@@ -378,18 +378,20 @@ class TransformerBase:
                 RasterioDeprecationWarning,
             )
 
-        AS_ARR = True if hasattr(xs, "__iter__") else False
+        IS_SCALAR = isinstance(xs, Number)
         xs, ys, zs = self._ensure_arr_input(xs, ys, zs=zs)
 
         try:
             new_cols, new_rows = self._transform(
                 xs, ys, zs, transform_direction=TransformDirection.reverse
             )
+            op(new_cols, out=new_cols)
+            op(new_rows, out=new_rows)
 
-            if len(new_rows) == 1 and not AS_ARR:
-                return (op(new_rows[0]), op(new_cols[0]))
+            if len(new_rows) == 1 and IS_SCALAR:
+                return new_rows[0], new_cols[0]
             else:
-                return ([op(r) for r in new_rows], [op(c) for c in new_cols])
+                return new_rows.tolist(), new_cols.tolist()
         except TypeError:
             raise TransformError("Invalid inputs")
 
