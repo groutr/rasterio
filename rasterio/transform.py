@@ -450,7 +450,7 @@ class TransformerBase:
             if len(new_xs) == 1 and IS_SCALAR:
                 return (new_xs[0], new_ys[0])
             else:
-                return new_xs, new_ys
+                return new_xs.tolist(), new_ys.tolist()
         except TypeError:
             raise TransformError("Invalid inputs")
 
