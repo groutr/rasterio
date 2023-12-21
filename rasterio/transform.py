@@ -493,7 +493,7 @@ class AffineTransformer(TransformerBase):
         transform_matrix = np.array([[a, b, c], [d, e, f]])
         input_matrix = np.array([xs, ys, zs])
         output_matrix = transform_matrix.dot(input_matrix)
-        return tuple(output_matrix.tolist())
+        return output_matrix
 
 
     def __repr__(self):
