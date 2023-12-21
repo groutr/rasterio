@@ -487,15 +487,11 @@ class AffineTransformer(TransformerBase):
         elif transform_direction is TransformDirection.reverse:
             transform = ~self._transformer
 
-        is_arr = True if type(xs) in [list, tuple] else False
-        if is_arr:
-            a, b, c, d, e, f, _, _, _ = transform
-            transform_matrix = np.array([[a, b, c], [d, e, f]])
-            input_matrix = np.array([xs, ys, np.ones(len(xs))])
-            output_matrix = np.dot(transform_matrix, input_matrix)
-            return (list(output_matrix[0]), list(output_matrix[1]))
-        else:
-            return transform * (xs, ys)
+        a, b, c, d, e, f, _, _, _ = transform
+        transform_matrix = np.array([[a, b, c], [d, e, f]])
+        input_matrix = np.array([xs, ys, zs])
+        output_matrix = transform_matrix.dot(input_matrix)
+        return tuple(output_matrix.tolist())
 
 
     def __repr__(self):
