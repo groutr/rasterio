@@ -5,6 +5,7 @@ from functools import partial
 import math
 import numpy as np
 import warnings
+from numbers import Number
 
 from affine import Affine
 
@@ -86,7 +87,7 @@ class TransformMethodsMixin:
         x,
         y,
         z=None,
-        op=math.floor,
+        op=np.floor,
         precision=None,
         transform_method=TransformMethod.affine,
         **rpc_options
@@ -103,7 +104,7 @@ class TransformMethodsMixin:
             Height associated with coordinates. Primarily used for RPC based
             coordinate transformations. Ignored for affine based
             transformations. Default: 0.
-        op : function, optional (default: math.floor)
+        op : function, optional (default: np.floor)
             Function to convert fractional pixels to whole numbers (floor,
             ceiling, round)
         transform_method: TransformMethod, optional
@@ -251,7 +252,7 @@ def xy(transform, rows, cols, zs=None, offset='center', **rpc_options):
         return transformer.xy(rows, cols, zs=zs, offset=offset)
 
 
-def rowcol(transform, xs, ys, zs=None, op=math.floor, precision=None, **rpc_options):
+def rowcol(transform, xs, ys, zs=None, op=np.floor, precision=None, **rpc_options):
     """Get rows and cols of the pixels containing (x, y).
 
     Parameters
