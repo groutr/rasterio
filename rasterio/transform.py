@@ -331,11 +331,16 @@ class TransformerBase:
             If input coordinates are not all of the same length
         """
         xs = np.atleast_1d(xs)
-        if zs is None:
-            b = np.broadcast(xs, ys)
-        else:
-            b = np.broadcast(xs, ys, zs)
-        assert b.ndim == 1
+        try:
+            if zs is None:
+                b = np.broadcast(xs, ys)
+            else:
+                b = np.broadcast(xs, ys, zs)
+        except ValueError as err:
+            raise TransformError(str(err))
+
+        if b.ndim != 1:
+            raise TransformError("Invalid dimensions after broadcast")
 
         pts = np.zeros((3, b.size))
         pts[0] = xs
