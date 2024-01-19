@@ -389,7 +389,7 @@ class TransformerBase:
                 RasterioDeprecationWarning,
             )
 
-        AS_ARR = True if hasattr(xs, "__iter__") else False
+        AS_ARR = any((hasattr(xs, "__iter__"), hasattr(ys, "__iter__"), hasattr(zs, "__iter__")))
         xs, ys, zs = self._ensure_arr_input(xs, ys, zs=zs)
 
         try:
