@@ -486,23 +486,23 @@ class AffineTransformer(TransformerBase):
         if not isinstance(affine_transform, Affine):
             raise ValueError("Not an affine transform")
         self._transformer = affine_transform
+        self._transform_arr = np.empty((3, 3))
 
     def _transform(self, xs, ys, zs, transform_direction):
+        input_matrix = np.empty((3, len(xs)))
+        input_matrix[0] = xs
+        input_matrix[1] = ys
+        input_matrix[2] = 1
+
         if transform_direction is TransformDirection.forward:
             transform = self._transformer
-        elif transform_direction is TransformDirection.reverse:
-            transform = ~self._transformer
-
-        is_arr = True if type(xs) in [list, tuple] else False
-        if is_arr:
-            a, b, c, d, e, f, _, _, _ = transform
-            transform_matrix = np.array([[a, b, c], [d, e, f]])
-            input_matrix = np.array([xs, ys, np.ones(len(xs))])
-            output_matrix = np.dot(transform_matrix, input_matrix)
-            return (list(output_matrix[0]), list(output_matrix[1]))
         else:
-            return transform * (xs, ys)
-
+            transform = ~self._transformer
+        arr = self._transform_arr
+        arr.flat[:] = transform
+        
+        output_matrix = np.matmul(arr, input_matrix, out=input_matrix)
+        return output_matrix[0], output_matrix[1]
 
     def __repr__(self):
         return "<AffineTransformer>"
