@@ -396,13 +396,20 @@ class TransformerBase:
             new_cols, new_rows = self._transform(
                 xs, ys, zs, transform_direction=TransformDirection.reverse
             )
-
-            if len(new_rows) == 1 and not AS_ARR:
-                return (op(new_rows[0]), op(new_cols[0]))
-            else:
-                return ([op(r) for r in new_rows], [op(c) for c in new_cols])
         except TypeError:
             raise TransformError("Invalid inputs")
+
+        if AS_ARR:
+            if isinstance(op, np.ufunc):
+                op(new_cols, out=new_cols)
+                op(new_rows, out=new_rows)
+                return new_rows.tolist(), new_cols.tolist()
+            else:
+                new_cols = map(op, new_cols.tolist())
+                new_rows = map(op, new_rows.tolist())
+                return list(new_rows), list(new_cols)
+        else:
+            return op(new_rows[0]), op(new_cols[0])
 
     def xy(self, rows, cols, zs=None, offset='center'):
         """
