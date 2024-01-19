@@ -330,13 +330,19 @@ class TransformerBase:
         TransformError
             If input coordinates are not all of the same length
         """
-        try:
-            xs, ys, zs = np.broadcast_arrays(xs, ys, 0 if zs is None else zs)
-        except ValueError as error:
-            raise TransformError(
-                "Input coordinates must be broadcastable to a 1d array"
-            ) from error
-        return np.atleast_1d(xs), np.atleast_1d(ys), np.atleast_1d(zs)
+        xs = np.atleast_1d(xs)
+        if zs is None:
+            b = np.broadcast(xs, ys)
+        else:
+            b = np.broadcast(xs, ys, zs)
+        assert b.ndim == 1
+
+        pts = np.zeros((3, b.size))
+        pts[0] = xs
+        pts[1] = ys
+        if zs is not None:
+            pts[2] = zs
+        return pts[0], pts[1], pts[2]
 
     def __enter__(self):
         return self
