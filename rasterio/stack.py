@@ -126,14 +126,13 @@ def stack(
             nodataval = first_nodataval
             dt = first.dtypes[0]
 
-            if indexes is None:
-                indexes = [None for s in sources]
-
             try:
                 first_colormap = first.colormap(1)
             except ValueError:
                 first_colormap = None
 
+        if indexes is None or isinstance(indexes, int):
+            indexes = [indexes] * len(sources)
         # scan input files
         xs = []
         ys = []
