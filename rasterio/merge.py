@@ -1,6 +1,6 @@
 """Copy valid pixels from input files to an output file."""
 
-from contextlib import ExitStack, contextmanager
+from contextlib import ExitStack, nullcontext
 import logging
 import os
 import math
@@ -230,14 +230,6 @@ def merge(
     if isinstance(sources[0], (str, os.PathLike)):
         dataset_opener = rasterio.open
     else:
-
-        @contextmanager
-        def nullcontext(obj):
-            try:
-                yield obj
-            finally:
-                pass
-
         dataset_opener = nullcontext
 
     dst = None

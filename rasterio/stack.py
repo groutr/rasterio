@@ -1,7 +1,7 @@
 """Raster stacking tool."""
 
 from collections.abc import Iterable
-from contextlib import ExitStack, contextmanager
+from contextlib import ExitStack, nullcontext
 import logging
 import os
 import math
@@ -113,14 +113,6 @@ def stack(
     if isinstance(sources[0], (str, os.PathLike)):
         dataset_opener = rasterio.open
     else:
-
-        @contextmanager
-        def nullcontext(obj):
-            try:
-                yield obj
-            finally:
-                pass
-
         dataset_opener = nullcontext
 
     dst = None
