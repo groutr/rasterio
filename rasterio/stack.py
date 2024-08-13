@@ -133,6 +133,10 @@ def stack(
 
         if indexes is None or isinstance(indexes, int):
             indexes = [indexes] * len(sources)
+
+        if len(indexes) != len(sources):
+            raise ValueError("Indexes for some sources are missing")
+
         # scan input files
         xs = []
         ys = []
