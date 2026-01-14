@@ -534,9 +534,9 @@ class AffineTransformer(TransformerBase):
         input_matrix[1] = bi.iters[1]
         input_matrix[2] = 1
 
-        if transform_direction is TransformDirection.forward:
+        if transform_direction == TransformDirection.forward:
             transformed = np.matmul(self._transform_arr, input_matrix, out=input_matrix)
-        elif transform_direction is TransformDirection.reverse:
+        elif transform_direction == TransformDirection.reverse:
             transformed = np.linalg.solve(self._transform_arr, input_matrix)
         return transformed[0], transformed[1]
 
